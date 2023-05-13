@@ -2,8 +2,12 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
+#include <WiFi.h>
 
 #define SENSOR 4
+
+const char *ssid = "POCO X5 5G";
+const char *password = "123456789";
 
 long currentMillis = 0;
 long previousMillis = 0;
@@ -25,7 +29,22 @@ void IRAM_ATTR pulseCounter()
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
+
+  // Konek ke WiFi
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.println("\nConnecting");
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(100);
+  }
+
+  Serial.println("\nConnected to the WiFi Network");
+  Serial.print("Local ESP32 IP: ");
+  Serial.println(WiFi.localIP());
 
   pinMode(SENSOR, INPUT_PULLUP);
 
