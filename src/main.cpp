@@ -4,7 +4,7 @@
 #include <Wire.h>
 #include <WiFi.h>
 
-#define SENSOR 4
+#define SENSOR 18
 
 const char *ssid = "POCO X5 5G";
 const char *password = "123456789";
