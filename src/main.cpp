@@ -29,7 +29,7 @@ void IRAM_ATTR pulseCounter()
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // Konek ke WiFi
   WiFi.mode(WIFI_STA);
@@ -46,6 +46,7 @@ void setup()
   Serial.print("Local ESP32 IP: ");
   Serial.println(WiFi.localIP());
 
+  // Set input mode
   pinMode(SENSOR, INPUT_PULLUP);
 
   pulseCount = 0;
