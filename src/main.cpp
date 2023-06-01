@@ -104,7 +104,7 @@ void setup()
 
   attachInterrupt(digitalPinToInterrupt(SENSOR), pulseCounter, FALLING);
 
-  client.setServer(mqtt_server, 1833);
+  client.setServer(mqtt_server, 1883);
   // client.setCallback(callback);
 }
 
@@ -157,12 +157,9 @@ void loop()
 
     Serial.println("=================================");
 
-    doc["flowMilliLitres"] = flowMilliLitres;
-    doc["flowLitres"] = flowLitres;
-    doc["totalMilliLitres"] = totalMilliLitres;
+    doc["flowRate"] = flowRate;
     doc["totalLitres"] = totalLitres;
 
-    serializeJson(doc, output);
     serializeJson(doc, output);
     Serial.println(output);
     client.publish("/home/sensors", output);
