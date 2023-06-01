@@ -121,7 +121,6 @@ void loop()
   currentMillis = millis();
   if (currentMillis - previousMillis > interval)
   {
-
     pulse1Sec = pulseCount;
     pulseCount = 0;
 
@@ -155,5 +154,18 @@ void loop()
     Serial.print("mL / ");
     Serial.print(totalLitres);
     Serial.println("L");
+
+    Serial.println("=================================");
+
+    doc["flowMilliLitres"] = flowMilliLitres;
+    doc["flowLitres"] = flowLitres;
+    doc["totalMilliLitres"] = totalMilliLitres;
+    doc["totalLitres"] = totalLitres;
+
+    serializeJson(doc, output);
+    serializeJson(doc, output);
+    Serial.println(output);
+    client.publish("/home/sensors", output);
+    Serial.println("Sent");
   }
 }
