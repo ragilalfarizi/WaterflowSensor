@@ -3,11 +3,18 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <WiFi.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+#include <ArduinoJson.hpp>
 
 #define SENSOR 18
 
 const char *ssid = "POCO X5 5G";
 const char *password = "123456789";
+const char *mqtt_server = "192.168.148.218";
+
+WiFiClient espClient;
+PubSubClient client(espClient);
 
 long currentMillis = 0;
 long previousMillis = 0;
@@ -30,21 +37,32 @@ void IRAM_ATTR pulseCounter()
 void setup()
 {
   Serial.begin(115200);
+  delay(10);
+  Serial.println();
+  Serial.print("[WiFi] Connecting to ");
+  Serial.println(ssid);
 
-  // Konek ke WiFi
-  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  Serial.println("\nConnecting");
 
   while (WiFi.status() != WL_CONNECTED)
   {
+    delay(500);
     Serial.print(".");
-    delay(100);
   }
 
-  Serial.println("\nConnected to the WiFi Network");
-  Serial.print("Local ESP32 IP: ");
+  Serial.println("");
+  Serial.println("WiFi connected!");
+  Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+  Serial.print("ESP Mac Address: ");
+  Serial.println(WiFi.macAddress());
+  Serial.print("Subnet Mask: ");
+  Serial.println(WiFi.subnetMask());
+  Serial.print("Gateway IP: ");
+  Serial.println(WiFi.gatewayIP());
+  Serial.print("DNS: ");
+  Serial.println(WiFi.dnsIP());
+  Serial.println("=============================================");
 
   // Set input mode
   pinMode(SENSOR, INPUT_PULLUP);
