@@ -1,4 +1,9 @@
-// https://how2electronics.com/iot-water-flow-meter-using-esp8266-water-flow-sensor/
+/**
+ * Capstone Project 2023 - Smart Home
+ * Instagram : @thewatermatters
+ * GitHub : xxx
+ */
+
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
@@ -7,8 +12,13 @@
 #include <ArduinoJson.h>
 #include <ArduinoJson.hpp>
 
-#define SENSOR 18
+#define SENSOR 18 // GPIO yang digunakan untuk sensor
 
+/**
+ * ssid -> WiFi yang akan digunakan
+ * password -> Kata sandi WiFi yang digunakan
+ * mqtt_server -> Alamat IP server untuk mqtt
+ */
 const char *ssid = "POCO X5 5G";
 const char *password = "123456789";
 const char *mqtt_server = "192.168.148.218";
@@ -29,6 +39,11 @@ unsigned int totalMilliLitres;
 float flowLitres;
 float totalLitres;
 
+/**
+ * @brief Menghubungkan ulang koneksi MQTT apabila gagal
+ * @param none
+ * @retval none
+ */
 void reconnect()
 {
   // Loop until we're reconnected
@@ -58,6 +73,11 @@ void reconnect()
   }
 }
 
+/**
+ * @brief Interrupt Handler Function untuk penghitung pulsa sensor
+ * @param none
+ * @retval none
+ */
 void IRAM_ATTR pulseCounter()
 {
   pulseCount++;
