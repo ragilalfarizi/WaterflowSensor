@@ -46,28 +46,23 @@ float totalLitres;
  */
 void reconnect()
 {
-  // Loop until we're reconnected
+  // Loop hingga terkoneksi kembali
   while (!client.connected())
   {
     Serial.print("Attempting MQTT connection...");
-    // Create a random client ID
+    // Membuat sebuah client ID acak
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
-    // Attempt to connect
+    // Mencoba menghubungkan
     if (client.connect(clientId.c_str()))
     {
       Serial.println("connected");
-      // Once connected, publish an announcement...
-      // client.publish("outTopic", "hello world");
-      // // ... and resubscribe
-      // client.subscribe("inTopic");
     }
     else
     {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
       delay(5000);
     }
   }
@@ -113,7 +108,6 @@ void setup()
   Serial.println(WiFi.dnsIP());
   Serial.println("=============================================");
 
-  // Set input mode
   pinMode(SENSOR, INPUT_PULLUP);
 
   pulseCount = 0;
@@ -125,7 +119,6 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(SENSOR), pulseCounter, FALLING);
 
   client.setServer(mqtt_server, 1883);
-  // client.setCallback(callback);
 }
 
 void loop()
@@ -144,31 +137,39 @@ void loop()
     pulse1Sec = pulseCount;
     pulseCount = 0;
 
-    // Because this loop may not complete in exactly 1 second intervals we calculate
-    // the number of milliseconds that have passed since the last execution and use
-    // that to scale the output. We also apply the calibrationFactor to scale the output
-    // based on the number of pulses per second per units of measure (litres/minute in
-    // this case) coming from the sensor.
+    // TODO : Translate comment-comment di bawah
+    /**
+     * @details Because this loop may not complete in exactly 1 second intervals we calculate
+                the number of milliseconds that have passed since the last execution and use
+                that to scale the output. We also apply the calibrationFactor to scale the output
+                based on the number of pulses per second per units of measure (litres/minute in
+                this case) coming from the sensor.
+     *
+    */
+
     flowRate = ((1000.0 / (millis() - previousMillis)) * pulse1Sec) / calibrationFactor;
     previousMillis = millis();
 
-    // Divide the flow rate in litres/minute by 60 to determine how many litres have
-    // passed through the sensor in this 1 second interval, then multiply by 1000 to
-    // convert to millilitres.
+    /**
+     * @details Divide the flow rate in litres/minute by 60 to determine how many litres have
+                passed through the sensor in this 1 second interval, then multiply by 1000 to
+                convert to millilitres.
+     */
+
     flowMilliLitres = (flowRate / 60) * 1000;
     flowLitres = (flowRate / 60);
 
-    // Add the millilitres passed in this second to the cumulative total
+    // Menambahkan nilai millilitres di atas ke jumlah kumulatif
     totalMilliLitres += flowMilliLitres;
     totalLitres += flowLitres;
 
-    // Print the flow rate for this second in litres / minute
+    // Menampilan nilai flow rate detik ini dalam Litres / minutes
     Serial.print("Flow rate: ");
-    Serial.print(float(flowRate)); // Print the integer part of the variable
+    Serial.print(float(flowRate));
     Serial.print("L/min");
-    Serial.print("\t"); // Print tab space
+    Serial.print("\t");
 
-    // Print the cumulative total of litres flowed since starting
+    // Menampilkan nilai kumulatif total dari Liter yang mengalir semenjak mulai
     Serial.print("Output Liquid Quantity: ");
     Serial.print(totalMilliLitres);
     Serial.print("mL / ");
@@ -177,6 +178,7 @@ void loop()
 
     Serial.println("=================================");
 
+    // Memasukan data FlowRate dan totalLitres ke dalam JSON untuk MQTT
     doc["flowRate"] = flowRate;
     doc["totalLitres"] = totalLitres;
 
