@@ -137,23 +137,21 @@ void loop()
     pulse1Sec = pulseCount;
     pulseCount = 0;
 
-    // TODO : Translate comment-comment di bawah
     /**
-     * @details Because this loop may not complete in exactly 1 second intervals we calculate
-                the number of milliseconds that have passed since the last execution and use
-                that to scale the output. We also apply the calibrationFactor to scale the output
-                based on the number of pulses per second per units of measure (litres/minute in
-                this case) coming from the sensor.
-     *
-    */
+     * @details karena loop ini mungkin tidak tepat 1 detik pada intervalnya, kita menghitung
+     *          angka millisekon yang telah lewat dari eksekusi terakhir dan menggunakannya
+     *          untuk menskalakan output. Kita juga menerapkan faktor kalibrasi untuk menskalakan
+     *          output berdasarkan jumlah pulsa per detik per satuan ukuran (liter/menit) yang
+     *          berasal dari sensor.
+     */
 
     flowRate = ((1000.0 / (millis() - previousMillis)) * pulse1Sec) / calibrationFactor;
     previousMillis = millis();
 
     /**
-     * @details Divide the flow rate in litres/minute by 60 to determine how many litres have
-                passed through the sensor in this 1 second interval, then multiply by 1000 to
-                convert to millilitres.
+     * @details Membagi flow rate dalam liter/menit oleh 60 untuk menentukan berapa banyak liter
+     *          yang telah melalui sensor dalam 1 detik interval, kemudian mengalikan dengan 1000
+     *          untuk mengubah ke mililiter.
      */
 
     flowMilliLitres = (flowRate / 60) * 1000;
