@@ -12,7 +12,10 @@
 #include <ArduinoJson.h>
 #include <ArduinoJson.hpp>
 
-#define SENSOR 18 // GPIO yang digunakan untuk sensor
+#define SENSOR 22 // GPIO yang digunakan untuk sensor
+#define ledMerah 19
+#define ledHijau 5
+#define baterryIn 32
 
 /**
  * ssid -> WiFi yang akan digunakan
@@ -21,7 +24,7 @@
  */
 const char *ssid = "POCO X5 5G";
 const char *password = "123456789";
-const char *mqtt_server = "192.168.148.218";
+const char *mqtt_server = "192.168.188.218";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
