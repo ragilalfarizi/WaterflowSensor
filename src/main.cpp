@@ -13,9 +13,9 @@
 #include <ArduinoJson.hpp>
 
 #define SENSOR 22 // GPIO yang digunakan untuk sensor
-#define ledMerah 19
-#define ledHijau 5
-#define baterryIn 32
+#define LED_MERAH 19
+#define LED_HIJAU 5
+#define BATTERY_PIN 32
 
 /**
  * ssid -> WiFi yang akan digunakan
@@ -41,6 +41,8 @@ unsigned long flowMilliLitres;
 unsigned int totalMilliLitres;
 float flowLitres;
 float totalLitres;
+float batteryDigitalValue;
+float batteryAnalogValue;
 
 /**
  * @brief Menghubungkan ulang koneksi MQTT apabila gagal
@@ -112,6 +114,9 @@ void setup()
   Serial.println("=============================================");
 
   pinMode(SENSOR, INPUT_PULLUP);
+  pinMode(BATTERY_PIN, INPUT);
+  pinMode(LED_MERAH, OUTPUT);
+  pinMode(LED_HIJAU, OUTPUT);
 
   pulseCount = 0;
   flowRate = 0.0;
@@ -164,6 +169,16 @@ void loop()
     totalMilliLitres += flowMilliLitres;
     totalLitres += flowLitres;
 
+    // Konversi ADC nilai tegangan baterai
+    batteryDigitalValue = analogRead(BATTERY_PIN);
+    batteryAnalogValue = (batteryDigitalValue * 3.3) / (4095);
+
+    // Menampilan nilai flow rate detik ini dalam Litres / minutes
+    Serial.print("Battery: ");
+    Serial.print(float(batteryAnalogValue));
+    Serial.print("V");
+    Serial.print("\t");
+
     // Menampilan nilai flow rate detik ini dalam Litres / minutes
     Serial.print("Flow rate: ");
     Serial.print(float(flowRate));
@@ -182,6 +197,7 @@ void loop()
     // Memasukan data FlowRate dan totalLitres ke dalam JSON untuk MQTT
     doc["flowRate"] = flowRate;
     doc["totalLitres"] = totalLitres;
+    doc["batterAnalogValue"] = batteryAnalogValue;
 
     serializeJson(doc, output);
     Serial.println(output);
