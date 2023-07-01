@@ -33,7 +33,7 @@ long currentMillis = 0;
 long previousMillis = 0;
 int interval = 1000;
 boolean ledState = LOW;
-float calibrationFactor = 4.5;
+float calibrationFactor = 8.5;
 volatile byte pulseCount;
 byte pulse1Sec = 0;
 float flowRate;
@@ -78,6 +78,8 @@ void reconnect()
  * @param none
  * @retval none
  */
+
+// TODO: masukin blink di LED hijau untuk menunjukkan bahwa sedang ada pembacaan
 void IRAM_ATTR pulseCounter()
 {
   pulseCount++;
@@ -169,6 +171,7 @@ void loop()
     totalMilliLitres += flowMilliLitres;
     totalLitres += flowLitres;
 
+    // TODO: tampilkan blink di LED merah sebagai indikator baterai lemah
     // Konversi ADC nilai tegangan baterai
     batteryDigitalValue = analogRead(BATTERY_PIN);
     batteryAnalogValue = (batteryDigitalValue * 3.3) / (4095);
