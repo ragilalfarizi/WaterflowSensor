@@ -24,7 +24,7 @@
  */
 const char *ssid = "POCO X5 5G";
 const char *password = "123456789";
-const char *mqtt_server = "192.168.188.218";
+const char *mqtt_server = "192.168.119.218";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
