@@ -62,6 +62,7 @@ void reconnect()
     if (client.connect(clientId.c_str()))
     {
       Serial.println("connected");
+      digitalWrite(LED_HIJAU, HIGH);
     }
     else
     {
@@ -79,10 +80,13 @@ void reconnect()
  * @retval none
  */
 
-// TODO: masukin blink di LED hijau untuk menunjukkan bahwa sedang ada pembacaan
 void IRAM_ATTR pulseCounter()
 {
   pulseCount++;
+  digitalWrite(LED_HIJAU, HIGH);
+  delay(250);
+  digitalWrite(LED_HIJAU, LOW);
+  delay(250);
 }
 
 void setup()
@@ -171,7 +175,6 @@ void loop()
     totalMilliLitres += flowMilliLitres;
     totalLitres += flowLitres;
 
-    // TODO: tampilkan blink di LED merah sebagai indikator baterai lemah
     // Konversi ADC nilai tegangan baterai
     batteryDigitalValue = analogRead(BATTERY_PIN);
     batteryAnalogValue = (batteryDigitalValue * 3.3) / (4095);
