@@ -83,9 +83,9 @@ void reconnect()
 void IRAM_ATTR pulseCounter()
 {
   pulseCount++;
-  digitalWrite(LED_HIJAU, HIGH);
+  digitalWrite(LED_MERAH, HIGH);
   delay(250);
-  digitalWrite(LED_HIJAU, LOW);
+  digitalWrite(LED_MERAH, LOW);
   delay(250);
 }
 
