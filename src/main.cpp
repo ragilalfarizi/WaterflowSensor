@@ -200,7 +200,7 @@ void loop()
     // Memasukan data FlowRate dan totalLitres ke dalam JSON untuk MQTT
     doc["flowRate"] = flowRate;
     doc["totalLitres"] = totalLitres;
-    doc["batterAnalogValue"] = batteryAnalogValue;
+    doc["batteryAnalogValue"] = batteryAnalogValue;
 
     serializeJson(doc, output);
     Serial.println(output);
