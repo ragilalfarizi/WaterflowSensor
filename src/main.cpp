@@ -83,10 +83,6 @@ void reconnect()
 void IRAM_ATTR pulseCounter()
 {
   pulseCount++;
-  digitalWrite(LED_MERAH, HIGH);
-  delay(250);
-  digitalWrite(LED_MERAH, LOW);
-  delay(250);
 }
 
 void setup()
@@ -107,6 +103,7 @@ void setup()
 
   Serial.println("");
   Serial.println("WiFi connected!");
+  digitalWrite(LED_MERAH, HIGH);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   Serial.print("ESP Mac Address: ");
